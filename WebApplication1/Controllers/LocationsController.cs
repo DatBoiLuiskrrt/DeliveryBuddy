@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
                         LocationsModel Location = new LocationsModel();
                         Location.Id = Convert.ToInt32(rdr["Id"]);
                         Location.Active = rdr["Active"].ToString();
-                        //Location.AptNumber = rdr["AptNumber"] != null ? Convert.ToInt32(rdr["AptNumber"]) : 0;
+                        Location.AptNumber = rdr["AptNumber"] == DBNull.Value ? (int?)null : Convert.ToInt32(rdr["AptNumber"]);
                         Location.StreetName = rdr["StreetName"].ToString();
                         Location.StateId = Convert.ToInt32(rdr["StateId"]);
                         Location.UserId = Convert.ToInt32(rdr["UserId"]);
