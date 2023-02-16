@@ -10,14 +10,21 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IConfiguration _config;
+        public UsersController(IConfiguration config)
+        {
+            _config = config;
+        }
         //get store procedure   
-        [HttpPost]
-        public static List<UserModel> InsertUser(string username, string password)
+        [HttpPost("user")]
+        public IEnumerable<UserModel> PostUser(string username, string password)
         {
             List<UserModel> users = new List<UserModel>();
-            using (SqlConnection con = new SqlConnection("DefaultConnection"))
+            string dbconnection = _config.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection con = new SqlConnection(dbconnection))
             {
-                using (SqlCommand cmd = new SqlCommand("InsertNewUser", con))
+                using (SqlCommand cmd = new SqlCommand("spInsertNewUser", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@username", username);
