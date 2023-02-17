@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
             string dbconnection = _config.GetConnectionString("DefaultConnection");
             using (SqlConnection con = new SqlConnection(dbconnection))
             {
-                using (SqlCommand cmd = new SqlCommand("getAllLocationsByCityId", con))
+                using (SqlCommand cmd = new SqlCommand("spGetAllLocationsByCityId", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Id", Id);
