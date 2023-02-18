@@ -1,0 +1,50 @@
+﻿@page "/Locations"
+@using System.Net.Http.Json
+@using System.Net.Http.Headers
+@inject IHttpClientFactory factory
+@inject TokenModel tokenInfo
+
+<PageTitle>Locations</PageTitle>
+
+@if (string.IsNullOrWhiteSpace(errorMessage) == false)
+{
+    <div class="h3 text-danger">@errorMessage</div>
+    <div class="h3 text-danger">You need to be logged in</div>
+}
+
+<h1>Locations Page what's up fool</h1>
+
+<button class="btn btn-primary" @onclick="() => FetchLocations(2)">Get Locations</button>
+@if (Locations is not null)
+{
+    @foreach (var l in Locations)
+    {
+        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+            <div class="h2">@l.HouseNumber, @l.StreetName</div>
+            <div class="h4" style="text-decoration:underline;">See More...</div>
+        </div>
+    }
+}
+
+
+@code {
+    private List<LocationsModel>? Locations;
+    private HttpClient? client;
+    private string errorMessage;
+
+    private async void FetchLocations(int CityId)
+    {
+        client = factory.CreateClient("api");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
+        try
+        {
+            Locations = await client.GetFromJsonAsync<List<LocationsModel>>($"Locations/GetLocationsByCityId?Id={CityId}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        await InvokeAsync(StateHasChanged);
+
+    }
+}
