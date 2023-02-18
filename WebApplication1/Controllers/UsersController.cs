@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,6 +18,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut("UpdateUser")]
+        [Authorize]
+
         public IEnumerable<UserModel> UpdateUser(string username, string password, int id)
         {
             List<UserModel> users = new List<UserModel>();
@@ -73,6 +76,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("DeleteUser")]
+        [Authorize]
+
         public IEnumerable<UserModel> DeleteUser(int id)
         {
             List<UserModel> users = new List<UserModel>();

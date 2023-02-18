@@ -24,6 +24,11 @@ else
     private AuthenticationModel login = new();
     private bool isLoggedIn = false;
 
+    protected override void OnInitialized()
+    {
+        isLoggedIn = !string.IsNullOrEmpty(tokenInfo.Token);
+    }
+
     private async void HandleValidSubmit()
     {
         var client = factory.CreateClient("api");
