@@ -12,9 +12,10 @@
 }
 else
 {
+    //OnValidSubmit
     <h1>Please Log In</h1>
-    <EditForm Model="login" OnInvalidSubmit="HandleValidSubmit">
-        <InputText @bind-Value="login.Username" />
+    <EditForm Model="login" OnValidSubmit="HandleValidSubmit">
+        <InputText @bind-Value="login.UserName" />
         <InputText type="password" @bind-Value="login.Password" />
         <button class="btn btn-success" type="submit">Log In</button>
     </EditForm>
@@ -33,7 +34,7 @@ else
     {
         var client = factory.CreateClient("api");
 
-        var info = await client.PostAsJsonAsync<AuthenticationModel>("authentication/login", login);
+        var info = await client.PostAsJsonAsync<AuthenticationModel>("Authentication/token", login);
 
         tokenInfo.Token = await info.Content.ReadAsStringAsync();
         isLoggedIn = true;
