@@ -15,6 +15,20 @@
 <h1>Locations Page what's up fool</h1>
 
 <button class="btn btn-primary" @onclick="() => FetchLocations(2)">Get Locations</button>
+<button class="btn btn-primary" @onclick="() => FetchAllStates()">Get All States</button>
+
+@if (States is not null)
+{
+    @foreach (var state in States)
+    {
+        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+            <div class="h2">@state.StateName, @state.StateCode</div>
+            <div class="h4" style="text-decoration:underline;">See More...</div>
+        </div>
+    }
+}
+
+
 @if (Locations is not null)
 {
     @foreach (var l in Locations)
@@ -31,7 +45,7 @@
     private List<LocationsModel>? Locations;
     private List<StatesModel>? States;
     private HttpClient? client;
-    private string errorMessage;
+    private string? errorMessage;
 
     private async void FetchAllStates()
     {
@@ -39,7 +53,7 @@
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beater", tokenInfo.Token);
         try
         {
-            States = await client.GetFromJsonAsync<List<StatesModel>>("/GetAllStates");
+            States = await client.GetFromJsonAsync<List<StatesModel>>("GetAllStates");
         }
         catch (Exception ex)
         {
@@ -47,7 +61,7 @@
         }
         await InvokeAsync(StateHasChanged);
     }
-    [HttpGet("GetLocationsByCityId")]
+    
     private async void FetchLocations(int CityId)
     {
         client = factory.CreateClient("api");
