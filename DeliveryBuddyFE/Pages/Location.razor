@@ -22,7 +22,7 @@
     @foreach (var state in States)
     {
         <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
-            <div class="h2">@state.StateName, @state.StateCode</div>
+            <div class="h2">@state.StateName, @state.StateCode, @state.Id</div>
             <div class="h4" style="text-decoration:underline;">See More...</div>
         </div>
     }
@@ -48,6 +48,20 @@
     private string? errorMessage;
 
     private async void FetchAllStates()
+    {
+        client = factory.CreateClient("api");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beater", tokenInfo.Token);
+        try
+        {
+            States = await client.GetFromJsonAsync<List<StatesModel>>("GetAllStates");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+    private async void FetchAllCities()
     {
         client = factory.CreateClient("api");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beater", tokenInfo.Token);
