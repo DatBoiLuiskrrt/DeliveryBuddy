@@ -42,7 +42,7 @@
         {
             States = await client.GetFromJsonAsync<List<StatesModel>>("/GetAllStates");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
