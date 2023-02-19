@@ -16,6 +16,7 @@
 
 <button class="btn btn-primary" @onclick="() => FetchLocations(2)">Get Locations</button>
 <button class="btn btn-primary" @onclick="() => FetchAllStates()">Get All States</button>
+<button class="btn btn-primary" @onclick="() => FetchAllCities()">Get All Citites</button>
 
 @if (States is not null)
 {
@@ -40,17 +41,29 @@
     }
 }
 
+@if (Cities is not null)
+{
+    @foreach (var city in Cities)
+    {
+        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+            <div class="h2">@city.CityName</div>
+            <div class="h4" style="text-decoration:underline;">See More...</div>
+        </div>
+    }
+}
+
 
 @code {
     private List<LocationsModel>? Locations;
     private List<StatesModel>? States;
+    private List<CitiesModel>? Cities;
     private HttpClient? client;
     private string? errorMessage;
 
     private async void FetchAllStates()
     {
         client = factory.CreateClient("api");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beater", tokenInfo.Token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
         {
             States = await client.GetFromJsonAsync<List<StatesModel>>("GetAllStates");
@@ -61,13 +74,14 @@
         }
         await InvokeAsync(StateHasChanged);
     }
+
     private async void FetchAllCities()
     {
         client = factory.CreateClient("api");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beater", tokenInfo.Token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
         {
-            States = await client.GetFromJsonAsync<List<StatesModel>>("GetAllStates");
+            Cities = await client.GetFromJsonAsync<List<CitiesModel>>("GetAllCitiesByStateId?Id=2");
         }
         catch (Exception ex)
         {

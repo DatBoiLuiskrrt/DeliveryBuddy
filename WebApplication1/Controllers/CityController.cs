@@ -32,9 +32,9 @@ namespace WebApplication1.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        CityModel City = new CityModel();
                         while (rdr.Read())
                         {
+                            CityModel City = new CityModel();
                             City.Id = Convert.ToInt32(rdr["Id"]);
                             City.CityName = rdr["CityName"].ToString();
                             City.StateId = Convert.ToInt32(rdr["StateId"]);
