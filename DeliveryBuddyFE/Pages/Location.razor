@@ -18,7 +18,14 @@
 <button class="btn btn-primary" @onclick="() => FetchAllStates()">Get All States</button>
 <button class="btn btn-primary" @onclick="() => FetchAllCities()">Get All Citites</button>
 
-@if (States is not null)
+
+<SfDropDownList TValue="string" TItem="StatesModel" DataSource="@States" Placeholder="Select a state">
+    <DropDownListFieldSettings Value="Id" Text="StateName"></DropDownListFieldSettings>
+</SfDropDownList>
+
+
+
+@*@if (States is not null)
 {
     @foreach (var state in States)
     {
@@ -28,7 +35,7 @@
         </div>
     }
 }
-
+*@
 
 @if (Locations is not null)
 {
@@ -89,7 +96,7 @@
         }
         await InvokeAsync(StateHasChanged);
     }
-    
+
     private async void FetchLocations(int CityId)
     {
         client = factory.CreateClient("api");

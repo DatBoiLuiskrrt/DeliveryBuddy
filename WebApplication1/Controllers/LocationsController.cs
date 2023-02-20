@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.NetworkInformation;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
