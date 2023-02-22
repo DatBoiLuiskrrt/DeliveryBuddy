@@ -25,6 +25,14 @@
 
 
 
+@*<tr>
+    <td>
+       <select class="form-control" id="dropdownStates" @bind="States">
+
+       </select>
+
+    </td>
+</tr>*@
 @*@if (States is not null)
 {
     @foreach (var state in States)
@@ -34,8 +42,8 @@
             <div class="h4" style="text-decoration:underline;">See More...</div>
         </div>
     }
-}
-*@
+}*@
+
 
 @if (Locations is not null)
 {
@@ -66,9 +74,13 @@
     private List<CitiesModel>? Cities;
     private HttpClient? client;
     private string? errorMessage;
-
+    protected override void OnInitialized()
+    {
+        FetchAllStates();
+    }
     private async void FetchAllStates()
     {
+
         client = factory.CreateClient("api");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
