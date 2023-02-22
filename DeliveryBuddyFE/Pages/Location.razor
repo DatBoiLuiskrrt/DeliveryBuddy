@@ -16,11 +16,12 @@
 
 <button class="btn btn-primary" @onclick="() => FetchLocations(2)">Get Locations</button>
 <button class="btn btn-primary" @onclick="() => FetchAllStates()">Get All States</button>
-<button class="btn btn-primary" @onclick="() => FetchAllCities()">Get All Citites</button>
+@*<button class="btn btn-primary" @onclick="() => FetchAllCities()">Get All Citites</button>*@
 
 
 <SfDropDownList TValue="string" TItem="StatesModel" DataSource="@States" Placeholder="Select a state">
     <DropDownListFieldSettings Value="Id" Text="StateName"></DropDownListFieldSettings>
+    <DropDownListEvents TValue="string" TItem="StatesModel" ValueChange="@FetchAllCities"></DropDownListEvents>
 </SfDropDownList>
 
 
@@ -93,14 +94,15 @@
         }
         await InvokeAsync(StateHasChanged);
     }
-
-    private async void FetchAllCities()
+    public int SelectedValue;
+    private async void FetchAllCities(ChangeEventArgs<string, StatesModel> args)
     {
+        SelectedValue = args.ItemData.Id;
         client = factory.CreateClient("api");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
         {
-            Cities = await client.GetFromJsonAsync<List<CitiesModel>>("GetAllCitiesByStateId?Id=2");
+            Cities = await client.GetFromJsonAsync<List<CitiesModel>>($"GetAllCitiesByStateId?Id={SelectedValue}");
         }
         catch (Exception ex)
         {
