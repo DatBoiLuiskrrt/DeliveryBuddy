@@ -13,7 +13,7 @@
 }
 
 <h1>Please select your state and city!</h1>
-<button type="button" class="btn btn-danger" @onclick="@Reset">Reset</button>
+<button type="button" class="btn btn-danger" style="margin: 1em 0;" @onclick="@Reset">Reset</button>
 
 <SfDropDownList TValue="string" TItem="StatesModel" DataSource="@States" Placeholder="Select a state">
     <DropDownListFieldSettings Value="Id" Text="StateName"></DropDownListFieldSettings>
@@ -41,19 +41,20 @@
         </div>
     }
 }
-
+<div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0;">
 @if (Cities is not null)
 {
     @foreach (var city in Cities)
     {
-        <a>
-            <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0; cursor=pointer;" @onclick="@(() => FetchLocations(@city.Id))">
+        <div style= "">
+            <div style="border: 1px solid black; border-radius:5px ; padding: 1em 1em; margin: .2em .2em; cursor=pointer; background-color: #6f42c1; color: white;" @onclick="@(() => FetchLocations(@city.Id))">
                 <div class="h2">@city.CityName</div>
-                <div class="h4" style="text-decoration:underline;">See More...</div>
+                @*<div class="h5" style="text-decoration:underline; font-weight:50;">See More...</div>*@
             </div>
-        </a>
+        </div>
     }
 }
+</div>
 
 
 @code {
@@ -106,6 +107,7 @@
         {
             errorMessage = ex.Message;
         }
+        Comments = null;
         await InvokeAsync(StateHasChanged);
     }
     private async void FetchLocations(int Id)
