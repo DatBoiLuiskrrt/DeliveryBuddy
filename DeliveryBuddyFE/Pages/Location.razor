@@ -12,12 +12,7 @@
     <div class="h3 text-danger">@errorMessage</div>
 }
 
-<h1>Locations Page what's up fool</h1>
-
-<button class="btn btn-primary" @onclick="() => FetchLocations(2)">Get Locations</button>
-<button class="btn btn-primary" @onclick="() => FetchAllStates()">Get All States</button>
-@*<button class="btn btn-primary" @onclick="() => FetchAllCities()">Get All Citites</button>*@
-
+<h1>Please select your state and city!</h1>
 
 <SfDropDownList TValue="string" TItem="StatesModel" DataSource="@States" Placeholder="Select a state">
     <DropDownListFieldSettings Value="Id" Text="StateName"></DropDownListFieldSettings>
@@ -26,33 +21,22 @@
 
 
 
-@*<tr>
-    <td>
-       <select class="form-control" id="dropdownStates" @bind="States">
-
-       </select>
-
-    </td>
-</tr>*@
-@*@if (States is not null)
-{
-    @foreach (var state in States)
-    {
-        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
-            <div class="h2">@state.StateName, @state.StateCode, @state.Id</div>
-            <div class="h4" style="text-decoration:underline;">See More...</div>
-        </div>
-    }
-}*@
-
-
 @if (Locations is not null)
 {
     @foreach (var l in Locations)
     {
-        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;" @onclick="@(() => FetchAllComments(@l.Id))" id="locationsContainer">
             <div class="h2">@l.HouseNumber @l.StreetName</div>
             <div class="h4" style="text-decoration:underline;">See More...</div>
+        </div>
+    }
+}
+@if (Comments is not null)
+{
+    @foreach (var c in Comments)
+    {
+        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+            <div class="h2">@c.CommentDescription</div>
         </div>
     }
 }
@@ -61,10 +45,12 @@
 {
     @foreach (var city in Cities)
     {
-        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
-            <div class="h2">@city.CityName</div>
-            <div class="h4" style="text-decoration:underline;">See More...</div>
-        </div>
+        <a>
+            <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0; cursor=pointer;" @onclick="@(() => FetchLocations(@city.Id))">
+                <div class="h2">@city.CityName</div>
+                <div class="h4" style="text-decoration:underline;">See More...</div>
+            </div>
+        </a>
     }
 }
 
@@ -73,6 +59,7 @@
     private List<LocationsModel>? Locations;
     private List<StatesModel>? States;
     private List<CitiesModel>? Cities;
+    private List<CommentsModel>? Comments;
     private HttpClient? client;
     private string? errorMessage;
     protected override void OnInitialized()
@@ -94,6 +81,7 @@
         }
         await InvokeAsync(StateHasChanged);
     }
+
     public int SelectedValue;
     private async void FetchAllCities(ChangeEventArgs<string, StatesModel> args)
     {
@@ -110,20 +98,36 @@
         }
         await InvokeAsync(StateHasChanged);
     }
-
-    private async void FetchLocations(int CityId)
+    private async void FetchLocations(int Id)
     {
         client = factory.CreateClient("api");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
         {
-            Locations = await client.GetFromJsonAsync<List<LocationsModel>>($"Locations/GetLocationsByCityId?Id={CityId}");
+            Locations = await client.GetFromJsonAsync<List<LocationsModel>>($"Locations/GetLocationsByCityId?Id={Id}");
         }
         catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
+        Cities = null;
         await InvokeAsync(StateHasChanged);
 
+    }
+    private async void FetchAllComments(int Id)
+    {
+        client = factory.CreateClient("api");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
+        try
+        {
+            Comments = await client.GetFromJsonAsync<List<CommentsModel>>($"Comments/GetCommentsByLocationId?Id={Id}");
+        }
+        catch(Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        Locations = null;
+        Cities = null;
+        await InvokeAsync(StateHasChanged);
     }
 }
