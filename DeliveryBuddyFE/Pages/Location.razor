@@ -13,6 +13,7 @@
 }
 
 <h1>Please select your state and city!</h1>
+<button type="button" class="btn btn-danger" @onclick="@Reset">Reset</button>
 
 <SfDropDownList TValue="string" TItem="StatesModel" DataSource="@States" Placeholder="Select a state">
     <DropDownListFieldSettings Value="Id" Text="StateName"></DropDownListFieldSettings>
@@ -62,9 +63,18 @@
     private List<CommentsModel>? Comments;
     private HttpClient? client;
     private string? errorMessage;
+
     protected override void OnInitialized()
     {
         FetchAllStates();
+    }
+    private void Reset()
+    {
+        Locations = null;
+        States = null;
+        Cities = null;
+        Comments = null;
+        InvokeAsync(StateHasChanged);
     }
     private async void FetchAllStates()
     {
@@ -110,7 +120,11 @@
         {
             errorMessage = ex.Message;
         }
-        Cities = null;
+        //removes locations from view if city has locations.
+        if (Locations is null)
+        {
+            Cities = null;
+        }
         await InvokeAsync(StateHasChanged);
 
     }
@@ -122,7 +136,7 @@
         {
             Comments = await client.GetFromJsonAsync<List<CommentsModel>>($"Comments/GetCommentsByLocationId?Id={Id}");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
