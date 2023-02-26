@@ -21,17 +21,18 @@
 </SfDropDownList>
 
 
-
+<div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0; ">
 @if (Locations is not null)
 {
     @foreach (var l in Locations)
     {
-        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;" @onclick="@(() => FetchAllComments(@l.Id))" id="locationsContainer">
+            <div style="border: 1px solid black; border-radius:5px ; padding: 1em 1em; margin: .2em .2em; cursor:pointer; background-color: #6f42c1; color: white;" @onclick="@(() => FetchAllComments(@l.Id))" id="locationsContainer">
             <div class="h2">@l.HouseNumber @l.StreetName</div>
-            <div class="h4" style="text-decoration:underline;">See More...</div>
         </div>
     }
 }
+</div>
+
 @if (Comments is not null)
 {
     @foreach (var c in Comments)
@@ -41,15 +42,14 @@
         </div>
     }
 }
-<div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0;">
+<div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0;  ">
 @if (Cities is not null)
 {
     @foreach (var city in Cities)
     {
-        <div style= "">
-            <div style="border: 1px solid black; border-radius:5px ; padding: 1em 1em; margin: .2em .2em; cursor=pointer; background-color: #6f42c1; color: white;" @onclick="@(() => FetchLocations(@city.Id))">
+            <div style="cursor:pointer;">
+            <div style="border: 1px solid black; border-radius:5px ; padding: 1em 1em; margin: .2em .2em; background-color: #6f42c1; color: white;" @onclick="@(() => FetchLocations(@city.Id))">
                 <div class="h2">@city.CityName</div>
-                @*<div class="h5" style="text-decoration:underline; font-weight:50;">See More...</div>*@
             </div>
         </div>
     }
@@ -107,6 +107,7 @@
         {
             errorMessage = ex.Message;
         }
+        Locations = null;
         Comments = null;
         await InvokeAsync(StateHasChanged);
     }
@@ -123,10 +124,12 @@
             errorMessage = ex.Message;
         }
         //removes locations from view if city has locations.
-        if (Locations is null)
+        if (Locations is not null)
         {
             Cities = null;
         }
+        
+
         await InvokeAsync(StateHasChanged);
 
     }
