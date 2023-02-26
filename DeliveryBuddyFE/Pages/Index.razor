@@ -1,7 +1,9 @@
-﻿@page "/indexPage"
+﻿@page "/"
 @using System.Net.Http.Json
 @inject IHttpClientFactory factory
 @inject TokenModel tokenInfo
+@inject NavigationManager NavigationManager
+
 
 <PageTitle>Index</PageTitle>
 
@@ -19,6 +21,7 @@ else
         <InputText type="password" @bind-Value="login.Password" />
         <button class="btn btn-success" type="submit">Log In</button>
     </EditForm>
+    <button class="btn btn-success" type="submit" onclick="@RedirectToSignUp">Create New User</button>
 }
 
 @code {
@@ -41,7 +44,10 @@ else
         await InvokeAsync(StateHasChanged);
         //let's blazor know to re-render the page.
     }
-    
+    private void RedirectToSignUp()
+    {
+        NavigationManager.NavigateTo("/SignUp");
+    }
     private void LogOut()
     {
         tokenInfo.Token = "";
