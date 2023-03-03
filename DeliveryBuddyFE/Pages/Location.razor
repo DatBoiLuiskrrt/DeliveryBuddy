@@ -32,16 +32,22 @@
     }
 }
 </div>
-
+<div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0;  ">
 @if (Comments is not null)
 {
     @foreach (var c in Comments)
     {
-        <div style="border: 1px solid red; padding: 1em 1em; margin: 1em 0;">
+            <div style="cursor:pointer;">
+
+        <div style="border: 1px solid black; border-radius:5px ; padding: 1em 1em; margin: .2em .2em; background-color: #6f42c1; color: white;">
             <div class="h2">@c.CommentDescription</div>
         </div>
+        </div>
+
     }
 }
+</div>
+
 <div style="display:flex; flex-wrap: wrap; width: 100%; margin: 1em 0;  ">
 @if (Cities is not null)
 {

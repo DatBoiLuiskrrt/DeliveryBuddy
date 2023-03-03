@@ -47,9 +47,9 @@ namespace WebApplication1.Controllers
             }
             return users;
         }
-        public record AuthenticationData(string? UserName, string? Password);
+        public record AuthenticationDatas(string? UserName, string? Password);
         [HttpPost("InsertNewUser")]
-        public ActionResult<string> PostUser([FromBody] AuthenticationData data)
+        public ActionResult<string> PostUser([FromBody] AuthenticationDatas data)
         {
             List<UserModel> users = new List<UserModel>();
             string dbconnection = _config.GetConnectionString("DefaultConnection");
