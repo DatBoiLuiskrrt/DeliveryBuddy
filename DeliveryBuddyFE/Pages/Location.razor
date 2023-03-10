@@ -37,11 +37,12 @@
 
     {
         @*OnValidSubmit = "HandleValidSubmit"*@
-        <EditForm Model="commentsSubmit">
+        <EditForm Model="commentsSubmit" OnValidSubmit="(() => HandleValidSubmit(commentsSubmit.LocationId))">
             <InputTextArea @bind-Value="commentsSubmit.CommentDescription" />
             <button class="btn btn-success" type="submit">Add new Comment</button>
         </EditForm>
         
+
         @foreach (var c in Comments)
         {
             <div style="cursor:pointer;">
@@ -90,6 +91,15 @@
         Cities = null;
         Comments = null;
         InvokeAsync(StateHasChanged);
+    }
+
+    private async void HandleValidSubmit(int locationId)
+    {
+        var client = factory.CreateClient("api");
+        var info = await client.PostAsJsonAsync<CommentsModel>($"Users/InsertNewUser", commentsSubmit);
+
+        await InvokeAsync(StateHasChanged);
+        //let's blazor know to re-render the page.
     }
     private async void FetchAllStates()
     {

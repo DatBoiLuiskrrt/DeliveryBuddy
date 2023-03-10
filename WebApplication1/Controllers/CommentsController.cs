@@ -41,5 +41,24 @@ namespace WebApplication1.Controllers
             }
             return Comments;
         }
+
+        [HttpPost("AddComment")]
+        public IActionResult AddComment(CommentsModel Comment)
+        {
+            string dbconnection = _config.GetConnectionString("DefaultConnection");
+            using (SqlConnection con = new SqlConnection(dbconnection))
+            {
+                using (SqlCommand cmd = new SqlCommand("spinsertnewcomment", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Comment", Comment.CommentDescription);
+                    cmd.Parameters.AddWithValue("@UserId", Comment.UserId);
+                    cmd.Parameters.AddWithValue("@LocationId", Comment.LocationId);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return Ok();
+        }
     }
 }
