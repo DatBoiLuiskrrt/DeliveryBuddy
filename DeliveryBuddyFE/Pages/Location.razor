@@ -37,10 +37,10 @@
 
     {
         @*OnValidSubmit = "HandleValidSubmit"*@
-        <EditForm Model="commentsSubmit" OnValidSubmit="(() => HandleValidSubmit(Comments[0].LocationId, Comments[0].UserId))">
+       @* <EditForm Model="commentsSubmit" OnValidSubmit="(() => HandleValidSubmit(Comments[0].LocationId, Comments[0].UserId))">
             <InputTextArea @bind-Value="commentsSubmit.CommentDescription" />
             <button class="btn btn-success" type="submit">Add new Comment</button>
-        </EditForm>
+        </EditForm>*@
         
 
         @foreach (var c in Comments)
@@ -95,16 +95,16 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private async void HandleValidSubmit(int locationId, int userId)
-    {
-        commentsSubmit.LocationId = locationId;
-        commentsSubmit.UserId = userId;
-        var client = factory.CreateClient("api");
-        var info = await client.PostAsJsonAsync<CommentsModel>($"Comments/AddComment", commentsSubmit);
+    //private async void HandleValidSubmit(int locationId, int userId)
+    //{
+    //    commentsSubmit.LocationId = locationId;
+    //    commentsSubmit.UserId = userId;
+    //    var client = factory.CreateClient("api");
+    //    var info = await client.PostAsJsonAsync<CommentsModel>($"Comments/AddComment", commentsSubmit);
 
-        await InvokeAsync(StateHasChanged);
-        //let's blazor know to re-render the page.
-    }
+    //    await InvokeAsync(StateHasChanged);
+    //    //let's blazor know to re-render the page.
+    //}
     private async void FetchAllStates()
     {
 

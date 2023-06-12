@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
             _config = config;
         }
         [HttpGet("GetCommentsByLocationId")]
-        public IEnumerable<CommentsModel> GetComments(int Id)
+        public IEnumerable<CommentsModel> GetComments(int Id, int StateId)
         {
             List<CommentsModel> Comments = new List<CommentsModel>();
             string dbconnection = _config.GetConnectionString("DefaultConnection");
@@ -26,6 +26,7 @@ namespace WebApplication1.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Id", Id);
+                    cmd.Parameters.AddWithValue("@StateId", StateId);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -33,8 +34,8 @@ namespace WebApplication1.Controllers
                         CommentsModel Comment = new CommentsModel();
                         Comment.Id = Convert.ToInt32(rdr["Id"]);
                         Comment.CommentDescription = rdr["CommentDescription"].ToString();
-                        Comment.UserId = Convert.ToInt32(rdr["UserId"]);
-                        Comment.LocationId = Convert.ToInt32(rdr["LocationId"]);
+                        Comment.StateId = Convert.ToInt32(rdr["StateId"]);
+                        Comment.CityId = Convert.ToInt32(rdr["CityId"]);
                         Comments.Add(Comment);
                     }
                 }
@@ -52,8 +53,8 @@ namespace WebApplication1.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Comment", Comment.CommentDescription);
-                    cmd.Parameters.AddWithValue("@UserId", Comment.UserId);
-                    cmd.Parameters.AddWithValue("@LocationId", Comment.LocationId);
+                    cmd.Parameters.AddWithValue("@StateId", Comment.StateId);
+                    cmd.Parameters.AddWithValue("@CityId", Comment.CityId);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
