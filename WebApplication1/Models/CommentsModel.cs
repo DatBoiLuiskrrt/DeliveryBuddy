@@ -6,5 +6,7 @@
         public string? CommentDescription { get; set; }
         public int? StateId { get; set; }
         public int? CityId { get; set; }
+        public string? Active { get; set; }
+        public int? UserId { get; set; }
     }
 }

@@ -36,6 +36,8 @@ namespace WebApplication1.Controllers
                         Comment.CommentDescription = rdr["CommentDescription"].ToString();
                         Comment.StateId = Convert.ToInt32(rdr["StateId"]);
                         Comment.CityId = Convert.ToInt32(rdr["CityId"]);
+                        Comment.Active = rdr["Active"].ToString();
+                        Comment.UserId = Convert.ToInt32(rdr["UserId"]);
                         Comments.Add(Comment);
                     }
                 }
@@ -55,6 +57,8 @@ namespace WebApplication1.Controllers
                     cmd.Parameters.AddWithValue("@Comment", Comment.CommentDescription);
                     cmd.Parameters.AddWithValue("@StateId", Comment.StateId);
                     cmd.Parameters.AddWithValue("@CityId", Comment.CityId);
+                    cmd.Parameters.AddWithValue("@UserId", Comment.UserId);
+                    cmd.Parameters.AddWithValue("@Active", Comment.Active);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
